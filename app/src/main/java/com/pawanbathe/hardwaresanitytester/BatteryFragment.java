@@ -38,6 +38,12 @@ public class BatteryFragment extends Fragment {
         return batteryFragmentView;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+ //       getActivity().
+    }
+
     private BroadcastReceiver BatteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

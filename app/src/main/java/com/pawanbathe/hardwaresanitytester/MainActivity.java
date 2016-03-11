@@ -61,10 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
        SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SOCFragment(), "SOC");
         adapter.addFragment(new DeviceFragment(), "Device");
+        adapter.addFragment(new SOCFragment(), "SOC");
         adapter.addFragment(new SoftwareFragment(), "Software");
-        adapter.addFragment(new SystemFragment(), "System");
         adapter.addFragment(new SensorsFragment(), "Sensors");
         adapter.addFragment(new BatteryFragment(),"Battery");
         viewPager.setAdapter(adapter);

@@ -3,16 +3,19 @@ package com.pawanbathe.hardwaresanitytester;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.util.regex.Pattern;
 
@@ -37,6 +40,12 @@ public class SOCFragment extends Fragment {
     private String freqInfoText;
     private String chipName=null;
     private String socVendor=null;
+    final String PREFIX_CPU_PATH="/sys/devices/system/cpu/cpu";
+    final String SUFIX_MIN="/cpufreq/cpuinfo_min_freq";
+    final String SUFIX_MAX="/cpufreq/cpuinfo_max_freq";
+    String PATH_MAX1=null;
+    String PATH_MAX2=null;
+    String PATH_MIN=null;
 
 
     public SOCFragment()
@@ -53,12 +62,6 @@ public class SOCFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final String PREFIX_CPU_PATH="/sys/devices/system/cpu/cpu";
-        final String SUFIX_MIN="/cpufreq/cpuinfo_min_freq";
-        final String SUFIX_MAX="/cpufreq/cpuinfo_max_freq";
-        String PATH_MAX1=null;
-        String PATH_MAX2=null;
-        String PATH_MIN=null;
 
         //Views Mapping
         socFragmentView = inflater.inflate(R.layout.fragment_soc, container, false);
@@ -74,8 +77,8 @@ public class SOCFragment extends Fragment {
         for(int i=0; i<cpuFiles.length; i++){
             freqInfoText += " \t \t CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n");
         }
-        freqInfoText+="CPU Load:"+ readUsage()*100;
-        cpuInfoDynamic.setText(freqInfoText);
+//        freqInfoText+="CPU Load:"+ readUsage()*100;
+//        cpuInfoDynamic.setText(freqInfoText);
 
         PATH_MIN=PREFIX_CPU_PATH+"0"+SUFIX_MIN;
         PATH_MAX1=PREFIX_CPU_PATH+"0"+SUFIX_MAX;
@@ -87,19 +90,31 @@ public class SOCFragment extends Fragment {
         Log.d("HST", PATH_MAX1);
         Log.d("HST", PATH_MIN);
 
-        cpuInfoStatic.setText(
-                "Cores: " + availableProcessors + "\n" +
-                        "Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
+        cpuInfoStatic.setText(Html.fromHtml(
+                "<B>Supported </B>" + getCPUFeatures().replace("\n", " ").trim() + "<br>" +
+                        "<B> Cores: </B>" + availableProcessors + "<br>" +
+                        "<B>Clock Speed:</B> " + minFreq + "-" + maxFreq + " MHz"));
 
         //SOC Info
-        chipName=getProp("ro.chipname").replace("\n"," ").toUpperCase();
-        socVendor=getProp("ro.hardware").replace("\n"," ").toUpperCase();
-        socInfo.setText("Model :" + socVendor+" "+ chipName );
+        chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
+        socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
-
+        socInfo.setText(Html.fromHtml("<B>Model :</B>" + socVendor+" "+ chipName ));
         mHandler = new Handler();
         mHandler.post(periodicCPUChecker);
         return socFragmentView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(periodicCPUChecker);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHandler.post(periodicCPUChecker);
     }
 
     //Run Periodic CPU Info Checker
@@ -111,9 +126,13 @@ public class SOCFragment extends Fragment {
             freqInfo=readCpuFreqNow();
             freqInfoText="";
             for(int i=0; i<cpuFiles.length; i++){
-                freqInfoText += "\t \t CPU "+i+": "+freqInfo[i].replace("\n"," ")+"\n";
+                try {
+                    freqInfoText += "\t \t CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n";
+                }catch (NumberFormatException nfe)
+                {
+                    freqInfoText += "\t \t CPU " + i + ": " + " " + "\n";
+                }
             }
-            freqInfoText+="CPU Load:"+ readUsage()*100;
             cpuInfoDynamic.setText(freqInfoText);
             mHandler.postDelayed(periodicCPUChecker, 500);
         }
@@ -141,31 +160,7 @@ public class SOCFragment extends Fragment {
         return strFileList;
     }
 
-    private String getProp(String property)
-    {
-        String[] command={"getprop",property};
-        StringBuilder cmdReturn = new StringBuilder();
 
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(command);
-            Process process = processBuilder.start();
-
-            InputStream inputStream = process.getInputStream();
-            int c;
-
-            while ((c = inputStream.read()) != -1) {
-                cmdReturn.append((char) c);
-            }
-
-            return cmdReturn.toString();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "0";
-        }
-
-
-    }
     private String cmdCat(String f){
 
         String[] command = {"cat", f};
@@ -212,39 +207,34 @@ public class SOCFragment extends Fragment {
         return files;
     }
 
-    private float readUsage() {
+    private String getCPUFeatures()
+    {
+        String cpuinfo="/proc/cpuinfo";
+        String[] command = {"cat", cpuinfo};
+        String cmdReturn = null;
+
         try {
-            RandomAccessFile reader = new RandomAccessFile("/proc/stat", "r");
-            String load = reader.readLine();
+            ProcessBuilder processBuilder = new ProcessBuilder(command);
+            Process process = processBuilder.start();
 
-            String[] toks = load.split(" +");  // Split on one or more spaces
+            BufferedReader inputStream = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-            long idle1 = Long.parseLong(toks[4]);
-            long cpu1 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[5])
-                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
+            String line = null;
+            while ((line = inputStream.readLine()) != null) {
+                if(line.contains("Features"))
+                {
+                    cmdReturn=line;
+                }
+            }
+            return cmdReturn;
 
-            try {
-                Thread.sleep(360);
-            } catch (Exception e) {}
-
-            reader.seek(0);
-            load = reader.readLine();
-            reader.close();
-
-            toks = load.split(" +");
-
-            long idle2 = Long.parseLong(toks[4]);
-            long cpu2 = Long.parseLong(toks[2]) + Long.parseLong(toks[3]) + Long.parseLong(toks[5])
-                    + Long.parseLong(toks[6]) + Long.parseLong(toks[7]) + Long.parseLong(toks[8]);
-
-            return (float)(cpu2 - cpu1) / ((cpu2 + idle2) - (cpu1 + idle1));
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "0";
         }
 
-        return 0;
     }
+
 //End CPU Information
 
 }
