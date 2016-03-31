@@ -3,18 +3,20 @@ package com.pawanbathe.hardwaresanitytester;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,11 @@ public class DeviceFragment extends Fragment {
 
     private View deviceFragmentView;
     private TextView deviceTextView;
+    private ArrayList<String> arrDeviceInfoList=null;
+    ListView diList=null;
+    List<String> deviceInfo=null;
+    StableArrayAdapter adapter;
+
     public DeviceFragment()
     {
 
@@ -44,7 +51,12 @@ public class DeviceFragment extends Fragment {
         String model,brand,board,sSize,sResolution,sDensity,sMemory,sMemoryNow,TotalRam,RamNow;
 
         deviceFragmentView = inflater.inflate(R.layout.fragment_device, container, false);
-        deviceTextView =(TextView) deviceFragmentView.findViewById(R.id.textViewDevice);
+        arrDeviceInfoList=new ArrayList<String>();
+        diList=(ListView) deviceFragmentView.findViewById(R.id.deviceinfo_list);
+        adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrDeviceInfoList);
+        diList.setAdapter(adapter);
+        arrDeviceInfoList.clear();
+
 
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");
@@ -58,20 +70,17 @@ public class DeviceFragment extends Fragment {
         RamNow= memData[1];
         sMemory=TotalRam;
         sMemoryNow= RamNow;
-        deviceTextView.setText(Html.fromHtml(
-                "<B>Model:</B> "+model+"<br>"+
-                        "<B>Brand:</B> \t"+brand+"<br>"+
-                        "<B>Board: </B>\t"+board+"<br>"+
-                        "<B>Screen Size:</B> \t "+sSize+" <br>"+
-                        "<B>Screen Resolution:</B> \t "+sResolution+"<br>"+
-                        "<B>Screen Density :</B> \t"+sDensity+"<br>"+
-                        "<B>Total RAM:</B> \t"+TotalRam+"<br>"+
-                        "<B>Available RAM:</B> \t"+RamNow+"<br>"+
-                        "<B>Internal Storage: </B>\t"+sMemory+"<br>"+
-                        "<B>Available Storage:</B>\t"+sMemoryNow+"<br>"));
-
-
-
+        arrDeviceInfoList.add("Model:"+model+" ");
+        arrDeviceInfoList.add("Brand:"+brand+"");
+        arrDeviceInfoList.add("Board:"+board+"");
+        arrDeviceInfoList.add("Screen Size:"+sSize);
+        arrDeviceInfoList.add("Screen Resolution:"+sResolution);
+        arrDeviceInfoList.add("Screen Density :"+sDensity);
+        arrDeviceInfoList.add("Total RAM:"+TotalRam);
+        arrDeviceInfoList.add("Available RAM:"+RamNow);
+        arrDeviceInfoList.add("Internal Storage:"+sMemory);
+        arrDeviceInfoList.add("Available Storage:"+sMemoryNow);
+        adapter.notifyDataSetChanged();
         return deviceFragmentView;
     }
 
@@ -163,4 +172,34 @@ public class DeviceFragment extends Fragment {
         ramInfo[1]= String.valueOf(lastNowValue);
         return ramInfo;
     }
+
+
+
+    // Adapter
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //  String item = getItem(position);
+            //    return mIdMap.get(item);
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
+
 }

@@ -1,13 +1,15 @@
 package com.pawanbathe.hardwaresanitytester;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -16,7 +18,9 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -27,7 +31,12 @@ public class SOCFragment extends Fragment {
     //Variable Declerations
 
     File[] cpuFiles;
-    private TextView cpuInfoStatic,cpuInfoDynamic,socInfo;
+    private TextView cpuInfoStatic,cpuInfoDynamic;
+    private ArrayList<String> arrSOCInfoList=null;
+    ListView siList=null;
+    List<String> socInfo=null;
+    StableArrayAdapter adapter;
+
 
     private View socFragmentView;
 
@@ -65,21 +74,7 @@ public class SOCFragment extends Fragment {
 
         //Views Mapping
         socFragmentView = inflater.inflate(R.layout.fragment_soc, container, false);
-
-        cpuInfoStatic= (TextView) socFragmentView.findViewById(R.id.textViewCpuInfoStatic);
-        cpuInfoDynamic= (TextView) socFragmentView.findViewById(R.id.textViewCpuInfoDynamic);
-        socInfo=(TextView) socFragmentView.findViewById(R.id.textViewSOC);
-
-        Runtime runtime = Runtime.getRuntime();
-        availableProcessors = runtime.availableProcessors();
-
         freqInfo=readCpuFreqNow();
-        for(int i=0; i<cpuFiles.length; i++){
-            freqInfoText += " \t \t CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n");
-        }
-//        freqInfoText+="CPU Load:"+ readUsage()*100;
-//        cpuInfoDynamic.setText(freqInfoText);
-
         PATH_MIN=PREFIX_CPU_PATH+"0"+SUFIX_MIN;
         PATH_MAX1=PREFIX_CPU_PATH+"0"+SUFIX_MAX;
         PATH_MAX2=PREFIX_CPU_PATH+cpuFiles.length+SUFIX_MAX;
@@ -90,16 +85,27 @@ public class SOCFragment extends Fragment {
         Log.d("HST", PATH_MAX1);
         Log.d("HST", PATH_MIN);
 
-        cpuInfoStatic.setText(Html.fromHtml(
-                "<B>Supported </B>" + getCPUFeatures().replace("\n", " ").trim() + "<br>" +
-                        "<B> Cores: </B>" + availableProcessors + "<br>" +
-                        "<B>Clock Speed:</B> " + minFreq + "-" + maxFreq + " MHz"));
+        arrSOCInfoList=new ArrayList<String>();
+        siList=(ListView) socFragmentView.findViewById(R.id.socinfo_list);
+        adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrSOCInfoList);
+        siList.setAdapter(adapter);
+        arrSOCInfoList.clear();
 
-        //SOC Info
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
-        socInfo.setText(Html.fromHtml("<B>Model :</B>" + socVendor+" "+ chipName ));
+        arrSOCInfoList.add("Model :" + socVendor+" "+ chipName);
+        arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim() );
+        arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "" );
+        arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
+
+        Runtime runtime = Runtime.getRuntime();
+        availableProcessors = runtime.availableProcessors();
+        for(int i=0; i<cpuFiles.length; i++){
+            arrSOCInfoList.add(" \t CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
+        }
+
+        adapter.notifyDataSetChanged();
         mHandler = new Handler();
         mHandler.post(periodicCPUChecker);
         return socFragmentView;
@@ -123,17 +129,24 @@ public class SOCFragment extends Fragment {
         @Override
         public void run() {
             // Do something here on the main thread
+            arrSOCInfoList.clear();
+            arrSOCInfoList.add("Model :" + socVendor + " " + chipName);
+            arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim() );
+            arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "" );
+            arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
+
             freqInfo=readCpuFreqNow();
             freqInfoText="";
             for(int i=0; i<cpuFiles.length; i++){
                 try {
-                    freqInfoText += "\t \t CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n";
+                    arrSOCInfoList.add( "\t \t CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n");
                 }catch (NumberFormatException nfe)
                 {
-                    freqInfoText += "\t \t CPU " + i + ": " + " " + "\n";
+                    arrSOCInfoList.add("\t \t CPU " + i + ": " + " " + "\n");
                 }
             }
-            cpuInfoDynamic.setText(freqInfoText);
+            adapter.notifyDataSetChanged();
+            //cpuInfoDynamic.setText(freqInfoText);
             mHandler.postDelayed(periodicCPUChecker, 500);
         }
     };
@@ -236,5 +249,33 @@ public class SOCFragment extends Fragment {
     }
 
 //End CPU Information
+
+
+    // Adapter
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //  String item = getItem(position);
+            //    return mIdMap.get(item);
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
 
 }

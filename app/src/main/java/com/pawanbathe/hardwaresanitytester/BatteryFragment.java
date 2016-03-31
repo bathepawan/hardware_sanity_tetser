@@ -10,7 +10,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by pbathe on 8/3/16.
@@ -19,6 +25,10 @@ public class BatteryFragment extends Fragment {
 
     private TextView batteryInfo;
     private View batteryFragmentView;
+    private ArrayList<String> arrBattInfoList=null;
+    ListView biList=null;
+    List<String> battInfo=null;
+    StableArrayAdapter adapter;
     public BatteryFragment()
     {
 
@@ -33,8 +43,11 @@ public class BatteryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         batteryFragmentView = inflater.inflate(R.layout.fragment_battery, container, false);
-        batteryInfo =(TextView) batteryFragmentView.findViewById(R.id.textViewBatteryInfo);
         getActivity().registerReceiver(this.BatteryInfoReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        arrBattInfoList=new ArrayList<String>();
+        biList=(ListView) batteryFragmentView.findViewById(R.id.batteryinfo_list);
+        adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrBattInfoList);
+        biList.setAdapter(adapter);
         return batteryFragmentView;
     }
 
@@ -47,6 +60,7 @@ public class BatteryFragment extends Fragment {
     private BroadcastReceiver BatteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            arrBattInfoList.clear();
             int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
             int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
             int  plugged= intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0);
@@ -56,22 +70,45 @@ public class BatteryFragment extends Fragment {
             String  technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
             int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
             int  voltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
-
-
-
-            batteryInfo.setText(
-                    "Health: "+health+"\n"+
-                            "Level: "+level+"\n"+
-                            "Plugged: "+plugged+"\n"+
-                            "Present: "+present+"\n"+
-                            "Scale: "+scale+"\n"+
-                            "Status: "+status+"\n"+
-                            "Technology: "+technology+"\n"+
-                            "Capacity: "+
-                            "Temperature: "+temperature+"\n"+
-                            "Voltage: "+voltage+"\n");
+            arrBattInfoList.add(0,"Health: "+health+"");
+            arrBattInfoList.add(1,"Level: "+level+"");
+            arrBattInfoList.add(2,"Plugged: "+plugged+"");
+            arrBattInfoList.add(3,"Present: "+present+"");
+            arrBattInfoList.add(4,"Scale: "+scale+"");
+            arrBattInfoList.add(5,"Status: "+status+"");
+            arrBattInfoList.add(6,"Technology: "+technology+"");
+            arrBattInfoList.add(7,"Temperature: "+temperature+"");
+            arrBattInfoList.add(8,"Voltage: "+voltage+" mV");
+            adapter.notifyDataSetChanged();
 
         }
     };
 
+
+    // Adapter
+    private class StableArrayAdapter extends ArrayAdapter<String> {
+
+        HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+
+        public StableArrayAdapter(Context context, int textViewResourceId,
+                                  List<String> objects) {
+            super(context, textViewResourceId, objects);
+            for (int i = 0; i < objects.size(); ++i) {
+                mIdMap.put(objects.get(i), i);
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            //  String item = getItem(position);
+            //    return mIdMap.get(item);
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+    }
 }

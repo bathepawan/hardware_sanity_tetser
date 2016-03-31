@@ -67,7 +67,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
         registerListeners();
         updateSensorsRawData();
 
-        adapter=new <String> StableArrayAdapter(getActivity(),R.layout.sensors_listview,sensorslist);
+        adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,sensorslist);
         sList.setAdapter(adapter);
 
         return viewSensorFragment;
