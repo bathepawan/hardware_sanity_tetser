@@ -30,6 +30,9 @@ public class DeviceFragment extends Fragment {
     private View deviceFragmentView;
     private TextView deviceTextView;
     private ArrayList<String> arrDeviceInfoList=null;
+    private String chipName=null;
+    private String socVendor=null;
+
     ListView diList=null;
     List<String> deviceInfo=null;
     StableArrayAdapter adapter;
@@ -56,7 +59,11 @@ public class DeviceFragment extends Fragment {
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrDeviceInfoList);
         diList.setAdapter(adapter);
         arrDeviceInfoList.clear();
+        chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
+        socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
+        arrDeviceInfoList.add("SOC Manufacture :" + socVendor);
+        arrDeviceInfoList.add("SOC Name: " + chipName);
 
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");

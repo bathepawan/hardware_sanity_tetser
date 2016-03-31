@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,6 @@ public class SOCFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         //Views Mapping
         socFragmentView = inflater.inflate(R.layout.fragment_soc, container, false);
         freqInfo=readCpuFreqNow();
@@ -82,8 +80,6 @@ public class SOCFragment extends Fragment {
         maxFreq=Integer.parseInt(cmdCat(PATH_MAX1).trim());
         minFreq=minFreq/1000;
         maxFreq=maxFreq/1000;
-        Log.d("HST", PATH_MAX1);
-        Log.d("HST", PATH_MIN);
 
         arrSOCInfoList=new ArrayList<String>();
         siList=(ListView) socFragmentView.findViewById(R.id.socinfo_list);
@@ -142,7 +138,7 @@ public class SOCFragment extends Fragment {
                     arrSOCInfoList.add( "\t \t CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n");
                 }catch (NumberFormatException nfe)
                 {
-                    arrSOCInfoList.add("\t \t CPU " + i + ": " + " " + "\n");
+                    arrSOCInfoList.add("\t \t CPU " + i + ": " + " off " + "\n");
                 }
             }
             adapter.notifyDataSetChanged();
