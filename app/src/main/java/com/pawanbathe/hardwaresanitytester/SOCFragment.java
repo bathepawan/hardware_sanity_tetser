@@ -1,6 +1,7 @@
 package com.pawanbathe.hardwaresanitytester;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -104,6 +105,15 @@ public class SOCFragment extends Fragment {
             arrSOCInfoList.add(" \t CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
         }
 
+        SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
+        String vendor = prefs.getString("VENDOR", null);
+        String renderer = prefs.getString("RENDERER", null);
+//        String version = prefs.getString("VERSION", null);
+//        String extensions = prefs.getString("EXTENSIONS", null);
+        arrSOCInfoList.add("GPU Vendor: "+vendor);
+        arrSOCInfoList.add("GPU Renderer: "+renderer);
+//        arrSOCInfoList.add("Open GL ES Version: "+version);
+
         adapter.notifyDataSetChanged();
         mHandler = new Handler();
         mHandler.post(periodicCPUChecker);
@@ -144,6 +154,15 @@ public class SOCFragment extends Fragment {
                     arrSOCInfoList.add("\t \t CPU " + i + ": " + " off " + "\n");
                 }
             }
+            SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
+            String vendor = prefs.getString("VENDOR", null);
+            String renderer = prefs.getString("RENDERER", null);
+//            String version = prefs.getString("VERSION", null);
+//            String extensions = prefs.getString("EXTENSIONS", null);
+            arrSOCInfoList.add("GPU Vendor: "+vendor);
+            arrSOCInfoList.add("GPU Renderer: "+renderer);
+//            arrSOCInfoList.add("Open GL ES Version: "+version);
+
             adapter.notifyDataSetChanged();
             //cpuInfoDynamic.setText(freqInfoText);
             mHandler.postDelayed(periodicCPUChecker, 500);
