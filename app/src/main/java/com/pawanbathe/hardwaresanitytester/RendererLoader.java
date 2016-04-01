@@ -31,7 +31,7 @@ public class RendererLoader extends Activity {
         setContentView(mGLView);
 
         final Intent intent = new Intent(this, MainActivity.class);
-        new CountDownTimer(500, 9999)
+        new CountDownTimer(200, 9999)
         {
             public void onTick(long millisUntilFinished) {
                 // Not used

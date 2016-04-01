@@ -51,14 +51,16 @@ public class SoftwareFragment extends Fragment {
         sList.setAdapter(adapter);
 
         arrSWInfoList.clear();
-        arrSWInfoList.add("Android Version :" + swInfo[0]);
-        arrSWInfoList.add("API Level : :" + swInfo[1]);
-        arrSWInfoList.add("Bootloader :" + swInfo[2]);
-        arrSWInfoList.add("Build ID  :" + swInfo[3]);
-        arrSWInfoList.add("Build Description :" + swInfo[4]);
-        arrSWInfoList.add("Build Date :" + swInfo[5]);
-        arrSWInfoList.add("CPU ABI :" + swInfo[6]);
-        arrSWInfoList.add("Kernel : " + swInfo[7]);
+        arrSWInfoList.add("\n    Android Version : " + swInfo[0] + "\n");
+        arrSWInfoList.add("\n    API Level : " + swInfo[1]+"\n");
+        arrSWInfoList.add("\n    Bootloader : " + swInfo[2]+"\n");
+        arrSWInfoList.add("\n    Build ID  : " + swInfo[3]+"\n");
+        arrSWInfoList.add("\n    Build Description :\n      " + swInfo[4].replace(" ","\n      ")+"\n");
+        arrSWInfoList.add("\n    Build Date : " + swInfo[5]+"\n");
+        arrSWInfoList.add("\n    CPU ABI : " + swInfo[6]+"\n");
+        arrSWInfoList.add("\n    Kernel Version: " + swInfo[7]+"\n");
+        arrSWInfoList.add("\n");
+
         adapter.notifyDataSetChanged();
         return viewSoftwareFragment;
     }

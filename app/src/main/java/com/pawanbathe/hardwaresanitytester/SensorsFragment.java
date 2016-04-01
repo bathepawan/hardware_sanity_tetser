@@ -99,59 +99,59 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
             switch (testSensor.getType())
             {
                 case Sensor.TYPE_ACCELEROMETER:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n X:  " + String.valueOf(df.format(event.values[0])) + " m/s^2 \n Y:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n Z:  " + String.valueOf(df.format(event.values[2])) + " m/s^2";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     X:  " + String.valueOf(df.format(event.values[0])) + " m/s^2 \n     Y:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n     Z:  " + String.valueOf(df.format(event.values[2])) + " m/s^2";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_AMBIENT_TEMPERATURE:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+event.values[0];
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+event.values[0];
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_GRAVITY:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n Force of gravity along the X axis:  " + String.valueOf(df.format(event.values[0])) + " m/s^2 \n Force of gravity along the Y axis:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n Force of gravity along the Z axis:  " + String.valueOf(df.format(event.values[2])) + " m/s^2";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     Force of gravity along the X axis:  " + String.valueOf(df.format(event.values[0])) + " m/s^2 \n     Force of gravity along the Y axis:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n     Force of gravity along the Z axis:  " + String.valueOf(df.format(event.values[2])) + " m/s^2";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_GYROSCOPE:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n X: "+ String.valueOf(df.format(event.values[0])) + " m/s^2 \n Y:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n Z:  " + String.valueOf(df.format(event.values[2])) + " m/s^2";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     X: "+ String.valueOf(df.format(event.values[0])) + " m/s^2 \n     Y:  " + String.valueOf(df.format(event.values[1])) + " m/s^2 \n     Z: " + String.valueOf(df.format(event.values[2])) + " m/s^2";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_LIGHT:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+String.valueOf(event.values[0]);
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n X: "+ String.valueOf(df.format(event.values[0])) + " m/s^2 \n Y: " + String.valueOf(df.format(event.values[1])) +"m/s^2 \n Z:  " + String.valueOf(df.format(event.values[2])) +" m/s^2";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     X: "+ String.valueOf(df.format(event.values[0])) + " m/s^2 \n     Y: " + String.valueOf(df.format(event.values[1])) +"m/s^2 \n     Z: " + String.valueOf(df.format(event.values[2])) +" m/s^2";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+String.valueOf(event.values[0]);;
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);;
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_PRESSURE:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+String.valueOf(event.values[0]);
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_PROXIMITY:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+String.valueOf(event.values[0]);
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_RELATIVE_HUMIDITY:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n "+String.valueOf(event.values[0]);;
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);;
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_ROTATION_VECTOR:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n Rotation vector component along X axis:  " + String.valueOf(df.format(event.values[0])) + "\n Rotation vector component along Y axis:  " + String.valueOf(df.format(event.values[1])) + " \n Rotation vector component along Z axis:  " + String.valueOf(df.format(event.values[2])) + "";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     Rotation vector component along X axis:  " + String.valueOf(df.format(event.values[0])) + "\n     Rotation vector component along Y axis:  " + String.valueOf(df.format(event.values[1])) + " \n     Rotation vector component along Z axis:  " + String.valueOf(df.format(event.values[2])) + "";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n Rotation around X axis:  " + String.valueOf(df.format(event.values[0])) + " rad/s \n Rotation around Y axis : " + String.valueOf(df.format(event.values[1])) + " rad/s \n Rotation around Z axis:  " + String.valueOf(df.format(event.values[2])) + " rad/s \n"+
-                            " Estimated drift around X axis:  " + String.valueOf(df.format(event.values[0])) + " rad/s \n Estimated drift around Y axis : " + String.valueOf(df.format(event.values[1])) + " rad/s \n Estimated drift around Z axis:  " + String.valueOf(df.format(event.values[2])) + " rad/s";
-                    sensorslist.set(index, itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     Rotation around X axis:  " + String.valueOf(df.format(event.values[0])) + " rad/s \n     Rotation around Y axis : " + String.valueOf(df.format(event.values[1])) + " rad/s \n     Rotation around Z axis:  " + String.valueOf(df.format(event.values[2])) + " rad/s \n"+
+                            "     Estimated drift around X axis:  " + String.valueOf(df.format(event.values[0])) + " rad/s \n     Estimated drift around Y axis : " + String.valueOf(df.format(event.values[1])) + " rad/s \n     Estimated drift around Z axis:  " + String.valueOf(df.format(event.values[2])) + " rad/s";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 default:
-                      itemSensor = String.valueOf(testSensor.getName()) +" :";
-                      sensorslist.set(index,itemSensor);
+                    itemSensor = String.valueOf(testSensor.getName()) +" :";
+                    sensorslist.set(index, "\n    "+itemSensor+"\n ");
             }
-        }
+    }
 
 
     void  updateSensorsRawData( )
@@ -164,71 +164,73 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
             {
                 case Sensor.TYPE_ACCELEROMETER:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_AMBIENT_TEMPERATURE:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Ambient Temperature = ";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_GRAVITY:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n X=0.0 m/s2 Y=0.0 m/s2 Z=0.0 m/s2";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_GYROSCOPE:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n X=0.0 m/s2 Y=0.0 m/s2 Z=0.0 m/s2";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_LIGHT:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 Lux";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n X=0.0 m/s2 Y=0.0 m/s2 Z=0.0 m/s2";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 micro Tesla";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_PRESSURE:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Pressure: 0 ";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_PROXIMITY:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Near/Far 0.0 cm";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_RELATIVE_HUMIDITY:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Relative Humidity";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_ROTATION_VECTOR:
                     itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Azimuth=0.0 Pitch=0.0 Roll=0.0 ";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n Uncalibrated Gyroscope";
-                    sensorslist.add(itemSensor);
+                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n";
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
 
                 default:
                     itemSensor = String.valueOf(mSensor[i].getName()) +" : \n";
-                    sensorslist.add(itemSensor);
+                    sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
             }
         }
+        sensorslist.add("\n");
+        sensorslist.add("\n");
 
     }
 

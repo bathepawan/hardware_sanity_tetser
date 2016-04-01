@@ -74,15 +74,17 @@ public class BatteryFragment extends Fragment {
             int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
             int  voltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
 
-            arrBattInfoList.add("Present: "+present+"");
-            arrBattInfoList.add("Health: "+battHealth[health]+"");
-            arrBattInfoList.add("Scale: "+scale+"");
-            arrBattInfoList.add("Level: "+level+"");
-            arrBattInfoList.add("Charging Status: "+chargingStatus[plugged]+"");
-            arrBattInfoList.add("Status: "+status+"");
-            arrBattInfoList.add("Technology: "+technology+"");
-            arrBattInfoList.add("Temperature: "+temperature+"");
-            arrBattInfoList.add("Voltage: "+voltage+" mV");
+            arrBattInfoList.add("\n    Present: "+present+"\n");
+            arrBattInfoList.add("\n    Health: "+battHealth[health]+"\n");
+            arrBattInfoList.add("\n    Scale: "+scale+"\n");
+            arrBattInfoList.add("\n    Level: "+level+"\n");
+            arrBattInfoList.add("\n    Charging Status: "+chargingStatus[plugged]+"\n");
+            arrBattInfoList.add("\n    Status: "+status+"\n");
+            arrBattInfoList.add("\n    Technology: "+technology+"\n");
+            arrBattInfoList.add("\n    Temperature: "+temperature+"\n");
+            arrBattInfoList.add("\n    Voltage: "+voltage+" mV \n");
+            arrBattInfoList.add("\n");
+
             adapter.notifyDataSetChanged();
 
         }

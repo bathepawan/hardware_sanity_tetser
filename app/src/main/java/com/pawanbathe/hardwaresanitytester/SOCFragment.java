@@ -93,25 +93,27 @@ public class SOCFragment extends Fragment {
         socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
 
-        arrSOCInfoList.add("Model :" + socVendor+" "+ chipName);
-        arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim());
+        arrSOCInfoList.add("\n    Model :" + socVendor+" "+ chipName+"\n");
 
-        arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "");
-        arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
+        arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n");
+        arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
 
         Runtime runtime = Runtime.getRuntime();
         availableProcessors = runtime.availableProcessors();
         for(int i=0; i<cpuFiles.length; i++){
-            arrSOCInfoList.add(" \t CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
+            arrSOCInfoList.add(" \t     CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
         }
+
+        arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim()+"\n");
 
         SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
         String vendor = prefs.getString("VENDOR", null);
         String renderer = prefs.getString("RENDERER", null);
 //        String version = prefs.getString("VERSION", null);
 //        String extensions = prefs.getString("EXTENSIONS", null);
-        arrSOCInfoList.add("GPU Vendor: "+vendor);
-        arrSOCInfoList.add("GPU Renderer: "+renderer);
+        arrSOCInfoList.add("\n    GPU Vendor: "+vendor+"\n");
+        arrSOCInfoList.add("\n    GPU Renderer: "+renderer+"\n");
+        arrSOCInfoList.add("\n");
 //        arrSOCInfoList.add("Open GL ES Version: "+version);
 
         adapter.notifyDataSetChanged();
@@ -139,28 +141,29 @@ public class SOCFragment extends Fragment {
         public void run() {
             // Do something here on the main thread
             arrSOCInfoList.clear();
-            arrSOCInfoList.add("Model :" + socVendor + " " + chipName);
-            arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim());
-            arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "" );
-            arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
+            arrSOCInfoList.add("\n    Model :" + socVendor + " " + chipName+"\n");
+            arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n" );
+            arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
 
             freqInfo=readCpuFreqNow();
             freqInfoText="";
             for(int i=0; i<cpuFiles.length; i++){
                 try {
-                    arrSOCInfoList.add( "\t \t CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n");
+                    arrSOCInfoList.add( "\n\t \t     CPU " + i + ": " + String.valueOf(Float.parseFloat(freqInfo[i].replace("\n", " ").trim()) / 1000.0) + "\n");
                 }catch (NumberFormatException nfe)
                 {
-                    arrSOCInfoList.add("\t \t CPU " + i + ": " + " off " + "\n");
+                    arrSOCInfoList.add("\n\t \t      CPU " + i + ": " + " off " + "\n");
                 }
             }
+            arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ","\n          ")+"\n");
             SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
             String vendor = prefs.getString("VENDOR", null);
             String renderer = prefs.getString("RENDERER", null);
 //            String version = prefs.getString("VERSION", null);
 //            String extensions = prefs.getString("EXTENSIONS", null);
-            arrSOCInfoList.add("GPU Vendor: "+vendor);
-            arrSOCInfoList.add("GPU Renderer: "+renderer);
+            arrSOCInfoList.add("\n    GPU Vendor: "+vendor+"\n");
+            arrSOCInfoList.add("\n    GPU Renderer: "+renderer+"\n");
+            arrSOCInfoList.add("\n");
 //            arrSOCInfoList.add("Open GL ES Version: "+version);
 
             adapter.notifyDataSetChanged();

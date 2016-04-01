@@ -62,8 +62,8 @@ public class DeviceFragment extends Fragment {
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
-        arrDeviceInfoList.add("SOC Manufacture :" + socVendor);
-        arrDeviceInfoList.add("SOC Name: " + chipName);
+        arrDeviceInfoList.add("\n        SOC Manufacture :" + socVendor+"\n");
+        arrDeviceInfoList.add("\n        SOC Name: " + chipName+"\n");
 
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");
@@ -77,16 +77,18 @@ public class DeviceFragment extends Fragment {
         RamNow= memData[1];
         sMemory=TotalRam;
         sMemoryNow= RamNow;
-        arrDeviceInfoList.add("Model:"+model+" ");
-        arrDeviceInfoList.add("Brand:"+brand+"");
-        arrDeviceInfoList.add("Board:"+board+"");
-        arrDeviceInfoList.add("Screen Size:"+sSize);
-        arrDeviceInfoList.add("Screen Resolution:"+sResolution);
-        arrDeviceInfoList.add("Screen Density :"+sDensity);
-        arrDeviceInfoList.add("Total RAM:"+TotalRam);
-        arrDeviceInfoList.add("Available RAM:"+RamNow);
-        arrDeviceInfoList.add("Internal Storage:"+sMemory);
-        arrDeviceInfoList.add("Available Storage:"+sMemoryNow);
+        arrDeviceInfoList.add("\n        Model :"+model+"\n ");
+        arrDeviceInfoList.add("\n        Brand :"+brand+"\n ");
+        arrDeviceInfoList.add("\n        Board :"+board+"\n");
+        arrDeviceInfoList.add("\n        Screen Size :"+sSize+"\n");
+        arrDeviceInfoList.add("\n        Screen Resolution :"+sResolution+"\n");
+        arrDeviceInfoList.add("\n        Screen Density :"+sDensity+" dpi\n");
+        arrDeviceInfoList.add("\n        Total RAM :"+TotalRam+"\n");
+        arrDeviceInfoList.add("\n        Available RAM :"+RamNow+"\n");
+        arrDeviceInfoList.add("\n        Internal Storage :"+sMemory+"\n");
+        arrDeviceInfoList.add("\n        Available Storage : "+sMemoryNow+"\n");
+        arrDeviceInfoList.add("\n");
+
         adapter.notifyDataSetChanged();
         return deviceFragmentView;
     }
