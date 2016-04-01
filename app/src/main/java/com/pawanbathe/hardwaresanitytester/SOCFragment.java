@@ -48,6 +48,7 @@ public class SOCFragment extends Fragment {
     private String freqInfoText;
     private String chipName=null;
     private String socVendor=null;
+    private String gpuInfo=null;
     final String PREFIX_CPU_PATH="/sys/devices/system/cpu/cpu";
     final String SUFIX_MIN="/cpufreq/cpuinfo_min_freq";
     final String SUFIX_MAX="/cpufreq/cpuinfo_max_freq";
@@ -90,9 +91,11 @@ public class SOCFragment extends Fragment {
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
+
         arrSOCInfoList.add("Model :" + socVendor+" "+ chipName);
-        arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim() );
-        arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "" );
+        arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim());
+
+        arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "");
         arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
 
         Runtime runtime = Runtime.getRuntime();
@@ -127,7 +130,7 @@ public class SOCFragment extends Fragment {
             // Do something here on the main thread
             arrSOCInfoList.clear();
             arrSOCInfoList.add("Model :" + socVendor + " " + chipName);
-            arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim() );
+            arrSOCInfoList.add("Supported " + getCPUFeatures().replace("\n", " ").trim());
             arrSOCInfoList.add("Total CPU Cores: " + availableProcessors + "" );
             arrSOCInfoList.add("Clock Speed: " + minFreq + "-" + maxFreq + " MHz");
 
@@ -273,5 +276,6 @@ public class SOCFragment extends Fragment {
         }
 
     }
+
 
 }

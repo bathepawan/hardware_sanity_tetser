@@ -29,6 +29,8 @@ public class BatteryFragment extends Fragment {
     ListView biList=null;
     List<String> battInfo=null;
     StableArrayAdapter adapter;
+    String battHealth[]={"UNKNOWN","UNKNOWN","GOOD","OVERHEAT","DEAD","VOLTAGE","UNSPECIFIED","FAILURE,BATTERY_HEALTH_COLD"};
+
     public BatteryFragment()
     {
 
@@ -60,6 +62,7 @@ public class BatteryFragment extends Fragment {
     private BroadcastReceiver BatteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            String chargingStatus[]={"Not Charging","Charging,AC Power Supply","Charging, PC USB / Power Bank"};
             arrBattInfoList.clear();
             int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
             int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
@@ -70,11 +73,12 @@ public class BatteryFragment extends Fragment {
             String  technology= intent.getExtras().getString(BatteryManager.EXTRA_TECHNOLOGY);
             int  temperature= intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,0);
             int  voltage= intent.getIntExtra(BatteryManager.EXTRA_VOLTAGE,0);
-            arrBattInfoList.add("Health: "+health+"");
+
+            arrBattInfoList.add("Present: "+present+"");
+            arrBattInfoList.add("Health: "+battHealth[health]+"");
             arrBattInfoList.add("Scale: "+scale+"");
             arrBattInfoList.add("Level: "+level+"");
-            arrBattInfoList.add("Plugged: "+plugged+"");
-            arrBattInfoList.add("Present: "+present+"");
+            arrBattInfoList.add("Charging Status: "+chargingStatus[plugged]+"");
             arrBattInfoList.add("Status: "+status+"");
             arrBattInfoList.add("Technology: "+technology+"");
             arrBattInfoList.add("Temperature: "+temperature+"");
