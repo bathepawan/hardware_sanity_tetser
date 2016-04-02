@@ -54,9 +54,9 @@ public class ThermalFragment extends Fragment {
         tz_types=readThermalZoneTypes();
         tz_temps=readThermalZoneValues();
         arrThermalInfoList.clear();
-        arrThermalInfoList.add("Available Thermal Zones: ");
+        arrThermalInfoList.add("\nAvailable Thermal Zones: \n");
         for (int i=0;i<thermalFiles.length;i++)
-        arrThermalInfoList.add("    "+tz_types[i].trim().replace("\n"," ")+":        "+tz_temps[i].trim().replace("\n"," ")+"  C");
+            arrThermalInfoList.add("\n  Thermal Zone "+i+" :\n     Type  : "+tz_types[i].trim().replace("\n"," ")+"\n     Temperature  : "+tz_temps[i].trim().replace("\n"," ")+"  C \n");
         arrThermalInfoList.add("\n");
         adapter.notifyDataSetChanged();
 
@@ -83,15 +83,22 @@ public class ThermalFragment extends Fragment {
     private Runnable periodicThermalChecker = new Runnable() {
         @Override
         public void run() {
-            tz_types=readThermalZoneTypes();
-            tz_temps=readThermalZoneValues();
-            arrThermalInfoList.clear();
-            arrThermalInfoList.add("Available Thermal Zones: ");
-            for (int i=0;i<thermalFiles.length;i++)
-                arrThermalInfoList.add("    "+tz_types[i].trim().replace("\n"," ")+":        "+tz_temps[i].trim().replace("\n"," ")+"  C");
-            arrThermalInfoList.add("\n");
-            adapter.notifyDataSetChanged();
-            mHandler.postDelayed(periodicThermalChecker, 500);
+            try {
+                tz_types = readThermalZoneTypes();
+                tz_temps = readThermalZoneValues();
+                arrThermalInfoList.clear();
+                arrThermalInfoList.add("\n Available Thermal Zones:\n ");
+                for (int i=0;i<thermalFiles.length;i++)
+                    arrThermalInfoList.add("\n  Thermal Zone "+i+" :\n     Type  : "+tz_types[i].trim().replace("\n"," ")+"\n     Temperature  : "+tz_temps[i].trim().replace("\n"," ")+"  C \n");
+                arrThermalInfoList.add("\n");
+                adapter.notifyDataSetChanged();
+                mHandler.postDelayed(periodicThermalChecker, 500);
+
+            }catch (Exception e)
+            {
+                tz_temps=null;
+                tz_types=null;
+            }
         }
     };
 
@@ -140,7 +147,6 @@ public class ThermalFragment extends Fragment {
                     thermalFiles[i].getAbsolutePath()+"/temp";
             String thermal_zone_temp = cmdCat(path_thermal_zone_type);
             double temp=Double.parseDouble(thermal_zone_temp);
-
             while(temp>150.00)
             {
                 temp=temp/10.00;
