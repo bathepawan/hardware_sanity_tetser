@@ -56,8 +56,14 @@ public class BatteryFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
- //       getActivity().
+//        getActivity().unregisterReceiver(this.BatteryInfoReceiver);
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+//        getActivity().registerReceiver(this.BatteryInfoReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+   }
+
 
     private BroadcastReceiver BatteryInfoReceiver = new BroadcastReceiver() {
         @Override

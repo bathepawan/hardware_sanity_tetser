@@ -2,6 +2,7 @@ package com.pawanbathe.hardwaresanitytester;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ public class ThermalFragment extends Fragment {
     ArrayList<String> arrThermalInfoList=null;
     ListView thermalList=null;
     StableArrayAdapter adapter;
-
+    private Handler mHandler;
     File[] thermalFiles;
     String[] tz_types;
     String[] tz_temps;
@@ -56,12 +57,44 @@ public class ThermalFragment extends Fragment {
         arrThermalInfoList.add("Available Thermal Zones: ");
         for (int i=0;i<thermalFiles.length;i++)
         arrThermalInfoList.add("    "+tz_types[i].trim().replace("\n"," ")+":        "+tz_temps[i].trim().replace("\n"," ")+"  C");
-
         arrThermalInfoList.add("\n");
-
         adapter.notifyDataSetChanged();
+
+        mHandler = new Handler();
+        mHandler.post(periodicThermalChecker);
+
         return viewThermalFragment;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mHandler.removeCallbacks(periodicThermalChecker);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mHandler.post(periodicThermalChecker);
+    }
+
+    //Run Periodic CPU Info Checker
+
+    private Runnable periodicThermalChecker = new Runnable() {
+        @Override
+        public void run() {
+            tz_types=readThermalZoneTypes();
+            tz_temps=readThermalZoneValues();
+            arrThermalInfoList.clear();
+            arrThermalInfoList.add("Available Thermal Zones: ");
+            for (int i=0;i<thermalFiles.length;i++)
+                arrThermalInfoList.add("    "+tz_types[i].trim().replace("\n"," ")+":        "+tz_temps[i].trim().replace("\n"," ")+"  C");
+            arrThermalInfoList.add("\n");
+            adapter.notifyDataSetChanged();
+            mHandler.postDelayed(periodicThermalChecker, 500);
+        }
+    };
+
 
 
     /*
