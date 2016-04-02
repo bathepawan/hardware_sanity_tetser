@@ -104,8 +104,8 @@ public class SOCFragment extends Fragment {
             arrSOCInfoList.add(" \t     CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
         }
 
-        arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim()+"\n");
-
+        arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ", "\n      ")+"\n");
+        arrSOCInfoList.add("\n    CPU Governer : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"));
         SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
         String vendor = prefs.getString("VENDOR", null);
         String renderer = prefs.getString("RENDERER", null);
@@ -156,6 +156,8 @@ public class SOCFragment extends Fragment {
                 }
             }
 
+            arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ","\n      ")+"\n");
+            arrSOCInfoList.add("\n    CPU Governer : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"));
             SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
             String vendor = prefs.getString("VENDOR", null);
             String renderer = prefs.getString("RENDERER", null);
