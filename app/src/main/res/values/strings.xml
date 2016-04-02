@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_about">About us</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="free_note">Hardware Sanity Tester is free software</string>
+    <string name="copyright">Copyright \u00a9 2016 - Pawan Bathe - All Rights Resereved </string>
+    <string name="feedback">For feedback: dev.hst@gmail.com</string>
 </resources>

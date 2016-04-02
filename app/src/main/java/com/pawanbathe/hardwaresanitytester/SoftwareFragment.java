@@ -80,6 +80,7 @@ public class SoftwareFragment extends Fragment {
         swInfo[8]= "NA";
         return swInfo;
     }
+
     private class StableArrayAdapter extends ArrayAdapter<String> {
 
         HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();

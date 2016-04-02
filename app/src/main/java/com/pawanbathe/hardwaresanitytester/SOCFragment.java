@@ -155,7 +155,7 @@ public class SOCFragment extends Fragment {
                     arrSOCInfoList.add("\n\t \t      CPU " + i + ": " + " off " + "\n");
                 }
             }
-            arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ","\n          ")+"\n");
+
             SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
             String vendor = prefs.getString("VENDOR", null);
             String renderer = prefs.getString("RENDERER", null);

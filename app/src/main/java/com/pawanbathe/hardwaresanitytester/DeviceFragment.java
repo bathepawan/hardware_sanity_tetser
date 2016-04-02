@@ -2,6 +2,8 @@ package com.pawanbathe.hardwaresanitytester;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -51,7 +53,7 @@ public class DeviceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        String model,brand,board,sSize,sResolution,sDensity,sMemory,sMemoryNow,TotalRam,RamNow;
+        String model,brand,board,sSize,sResolution,sDensity,sMemory,sMemoryNow,TotalRam,RamNow,esMemory,esMemoryNow;
 
         deviceFragmentView = inflater.inflate(R.layout.fragment_device, container, false);
         arrDeviceInfoList=new ArrayList<String>();
@@ -60,7 +62,7 @@ public class DeviceFragment extends Fragment {
         diList.setAdapter(adapter);
         arrDeviceInfoList.clear();
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
-        socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
+        socVendor=InfoManager.getProp("ro.hardware").replace("\n", " ").toUpperCase();
 
         arrDeviceInfoList.add("\n        SOC Manufacture :" + socVendor+"\n");
         arrDeviceInfoList.add("\n        SOC Name: " + chipName+"\n");
@@ -75,18 +77,26 @@ public class DeviceFragment extends Fragment {
         String[] memData= getRAMInfo();
         TotalRam =memData[0];
         RamNow= memData[1];
-        sMemory=TotalRam;
-        sMemoryNow= RamNow;
-        arrDeviceInfoList.add("\n        Model :"+model+"\n ");
-        arrDeviceInfoList.add("\n        Brand :"+brand+"\n ");
-        arrDeviceInfoList.add("\n        Board :"+board+"\n");
-        arrDeviceInfoList.add("\n        Screen Size :"+sSize+"\n");
-        arrDeviceInfoList.add("\n        Screen Resolution :"+sResolution+"\n");
-        arrDeviceInfoList.add("\n        Screen Density :"+sDensity+" dpi\n");
-        arrDeviceInfoList.add("\n        Total RAM :"+TotalRam+"\n");
-        arrDeviceInfoList.add("\n        Available RAM :"+RamNow+"\n");
-        arrDeviceInfoList.add("\n        Internal Storage :"+sMemory+"\n");
+
+        String[] storageData= getStorageInfo();
+
+        sMemory=storageData[1];
+        sMemoryNow=storageData[0];
+//        esMemory=storageData[3];
+//        esMemoryNow=storageData[2];
+
+        arrDeviceInfoList.add("\n        Model : "+model+"\n ");
+        arrDeviceInfoList.add("\n        Brand : "+brand+"\n ");
+        arrDeviceInfoList.add("\n        Board : "+board+"\n");
+        arrDeviceInfoList.add("\n        Screen Size : "+sSize+"\n");
+        arrDeviceInfoList.add("\n        Screen Resolution : "+sResolution+"\n");
+        arrDeviceInfoList.add("\n        Screen Density : "+sDensity+" dpi\n");
+        arrDeviceInfoList.add("\n        Total RAM : "+TotalRam+"\n");
+        arrDeviceInfoList.add("\n        Available RAM : "+RamNow+"\n");
+        arrDeviceInfoList.add("\n        Internal Storage : "+sMemory+"\n");
         arrDeviceInfoList.add("\n        Available Storage : "+sMemoryNow+"\n");
+//        arrDeviceInfoList.add("\n        External Storage :"+esMemory+"\n");
+//        arrDeviceInfoList.add("\n        External Available Storage : "+esMemoryNow+"\n");
         arrDeviceInfoList.add("\n");
 
         adapter.notifyDataSetChanged();
@@ -182,6 +192,35 @@ public class DeviceFragment extends Fragment {
         return ramInfo;
     }
 
+
+    public String[] getStorageInfo()
+    {
+        DecimalFormat twoDecimalForm = new DecimalFormat("#.##");
+        String storageInfo[]=new String[4];
+        StatFs isstat = new StatFs(Environment.getDataDirectory().getPath());
+
+        float bytesAvailable = (float)isstat.getFreeBlocks() * (float)isstat.getBlockSize();
+        float megAvailable = bytesAvailable / 1048576;
+        float totalbytesAvailable = (float)isstat.getBlockSize() *(float)isstat.getBlockCount();
+        float totalmegAvailable = totalbytesAvailable / 1048576;
+
+        float gbAvailable=megAvailable/1024;
+        float gbTotal=totalmegAvailable/1024;
+        storageInfo[0]=String.valueOf(twoDecimalForm.format(gbAvailable).concat(" GB"));
+        storageInfo[1]=String.valueOf(twoDecimalForm.format(gbTotal).concat(" GB"));
+
+/*        StatFs esstat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        float esbytesAvailable = (float)esstat.getFreeBlocks() * (float)esstat.getBlockSize();
+        float esmegAvailable = esbytesAvailable / 1048576;
+
+        float estotalbytesAvailable = (float)esstat.getBlockSize() *(float)esstat.getBlockCount();
+        float estotalmegAvailable = estotalbytesAvailable / 1048576;
+
+        storageInfo[2]=String.valueOf(esmegAvailable/1024);
+        storageInfo[3]=String.valueOf(estotalmegAvailable/1024);
+*/
+        return storageInfo;
+    }
 
 
     // Adapter

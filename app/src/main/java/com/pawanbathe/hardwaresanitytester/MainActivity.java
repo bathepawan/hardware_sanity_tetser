@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new SoftwareFragment(), "Software");
         adapter.addFragment(new SensorsFragment(), "Sensors");
         adapter.addFragment(new BatteryFragment(),"Battery");
+        adapter.addFragment(new ThermalFragment(),"Thermal");
+        adapter.addFragment(new AboutFragment(),"About");
         viewPager.setAdapter(adapter);
     }
 
