@@ -51,13 +51,23 @@ public class ThermalFragment extends Fragment {
         thermalList=(ListView) viewThermalFragment.findViewById(R.id.thermalinfo_list);
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrThermalInfoList);
         thermalList.setAdapter(adapter);
-        tz_types=readThermalZoneTypes();
-        tz_temps=readThermalZoneValues();
-        arrThermalInfoList.clear();
-        arrThermalInfoList.add("\nAvailable Thermal Zones: \n");
-        for (int i=0;i<thermalFiles.length;i++)
-            arrThermalInfoList.add("\n  Thermal Zone "+i+" :\n     Type  : "+tz_types[i].trim().replace("\n"," ")+"\n     Temperature  : "+tz_temps[i].trim().replace("\n"," ")+"  C \n");
+        try {
+            tz_types = readThermalZoneTypes();
+            tz_temps = readThermalZoneValues();
+            arrThermalInfoList.clear();
+            arrThermalInfoList.add("\nAvailable Thermal Zones: \n");
+            for (int i = 0; i < thermalFiles.length; i++)
+                arrThermalInfoList.add("\n  Thermal Zone " + i + " :\n     Type  : " + tz_types[i].trim().replace("\n", " ") + "\n     Temperature  : " + tz_temps[i].trim().replace("\n", " ") + "  C \n");
+            }
+        catch (Exception e)
+        {
+            tz_temps=null;
+            tz_types=null;
+            arrThermalInfoList.add("Permission Error , Can not get thermal info on your device!");
+
+        }
         arrThermalInfoList.add("\n");
+
         adapter.notifyDataSetChanged();
 
         mHandler = new Handler();
@@ -84,7 +94,6 @@ public class ThermalFragment extends Fragment {
         @Override
         public void run() {
             try {
-                tz_types = readThermalZoneTypes();
                 tz_temps = readThermalZoneValues();
                 arrThermalInfoList.clear();
                 arrThermalInfoList.add("\n Available Thermal Zones:\n ");
@@ -92,12 +101,14 @@ public class ThermalFragment extends Fragment {
                     arrThermalInfoList.add("\n  Thermal Zone "+i+" :\n     Type  : "+tz_types[i].trim().replace("\n"," ")+"\n     Temperature  : "+tz_temps[i].trim().replace("\n"," ")+"  C \n");
                 arrThermalInfoList.add("\n");
                 adapter.notifyDataSetChanged();
-                mHandler.postDelayed(periodicThermalChecker, 500);
+                mHandler.postDelayed(periodicThermalChecker, 5000);
 
             }catch (Exception e)
             {
+                arrThermalInfoList.clear();
                 tz_temps=null;
-                tz_types=null;
+                arrThermalInfoList.add("Permission Error , Can not get thermal info on your device!");
+                adapter.notifyDataSetChanged();
             }
         }
     };

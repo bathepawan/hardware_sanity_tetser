@@ -27,7 +27,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
 
     private SensorManager mSensorManager;
     private View viewSensorFragment;
-    private Sensor mSensor[]=new Sensor[20],testSensor;
+    private Sensor mSensor[],testSensor;
     ArrayList<String> sensorslist=null;
     ArrayList<String> sensorslistindex=null;
     ListView sList=null;
@@ -57,7 +57,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
         viewSensorFragment =inflater.inflate(R.layout.fragment_sensors, container, false);
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-
+        mSensor=new Sensor[deviceSensors.size()+2];
         sList = (ListView) viewSensorFragment.findViewById(R.id.sensors_list);
 
         //Float format
@@ -66,8 +66,16 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
         sensorslist= new ArrayList<String>();
         sensorslistindex= new ArrayList<String>();
         //Event Listener and Initialization
+
+    try {
         registerListeners();
         updateSensorsRawData();
+    }catch(Exception e)
+    {
+        sensorslist.clear();
+        sensorslist.add("Error in getting sensors details, Please close app and retry");
+    }
+
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,sensorslist);
         sList.setAdapter(adapter);
         return viewSensorFragment;
@@ -83,8 +91,14 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
     @Override
     public void onSensorChanged(SensorEvent event) {
             //sensorslist.clear();
+        try {
             updateSensorsLiveData(event);
             adapter.notifyDataSetChanged();
+        }catch(Exception e)
+        {
+            sensorslist.clear();
+            sensorslist.add("Error in getting sensors details, Please close app and retry");
+        }
     }
 
     @Override
@@ -115,7 +129,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
                     sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_LIGHT:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]+" lux");
                     sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_LINEAR_ACCELERATION:
@@ -123,11 +137,11 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
                     sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);;
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0])+" \u03BCT";
                     sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_PRESSURE:
-                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]);
+                    itemSensor = String.valueOf(testSensor.getName()) + " : \n     "+String.valueOf(event.values[0]+" hPa");
                     sensorslist.set(index, "\n    "+itemSensor+"\n ");
                     break;
                 case Sensor.TYPE_PROXIMITY:
@@ -157,6 +171,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
     void  updateSensorsRawData( )
     {
 
+//        Log.d("RAWAN","Sensors available"+deviceSensors.size());
         for(int i=0; i<deviceSensors.size(); i++) {
             mSensor[i]=deviceSensors.get(i);
 
@@ -183,7 +198,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_LIGHT:
-                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 Lux";
+                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 lux";
                     sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
@@ -193,7 +208,7 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
                     sensorslistindex.add(mSensor[i].getName());
                     break;
                 case Sensor.TYPE_MAGNETIC_FIELD:
-                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 micro Tesla";
+                    itemSensor=String.valueOf(mSensor[i].getName()) + " : \n 0.0 micro Tesla"+" \u03BCT";
                     sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
@@ -222,7 +237,6 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
                     sensorslist.add("\n    "+itemSensor+"\n ");
                     sensorslistindex.add(mSensor[i].getName());
                     break;
-
                 default:
                     itemSensor = String.valueOf(mSensor[i].getName()) +" : \n";
                     sensorslist.add("\n    "+itemSensor+"\n ");

@@ -57,7 +57,6 @@ public class SOCFragment extends Fragment {
     String PATH_MAX2=null;
     String PATH_MIN=null;
 
-
     public SOCFragment()
     {
 
@@ -93,7 +92,7 @@ public class SOCFragment extends Fragment {
         socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
 
 
-        arrSOCInfoList.add("\n    Model :" + socVendor+" "+ chipName+"\n");
+        arrSOCInfoList.add("\n    Model : " + socVendor+" "+ chipName+"\n");
 
         arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n");
         arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
@@ -105,16 +104,17 @@ public class SOCFragment extends Fragment {
         }
 
         arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ", "\n      ")+"\n");
-        arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"));
+        arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").toUpperCase());
         SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
         String vendor = prefs.getString("VENDOR", null);
         String renderer = prefs.getString("RENDERER", null);
 //        String version = prefs.getString("VERSION", null);
 //        String extensions = prefs.getString("EXTENSIONS", null);
+
         arrSOCInfoList.add("\n    GPU Vendor: "+vendor+"\n");
         arrSOCInfoList.add("\n    GPU Renderer: "+renderer+"\n");
+        //arrSOCInfoList.add("Open GL ES Version: "+configurationInfo.reqGlEsVersion);
         arrSOCInfoList.add("\n");
-//        arrSOCInfoList.add("Open GL ES Version: "+version);
 
         adapter.notifyDataSetChanged();
         mHandler = new Handler();
@@ -141,7 +141,7 @@ public class SOCFragment extends Fragment {
         public void run() {
             // Do something here on the main thread
             arrSOCInfoList.clear();
-            arrSOCInfoList.add("\n    Model :" + socVendor + " " + chipName+"\n");
+            arrSOCInfoList.add("\n    Model : " + socVendor + " " + chipName+"\n");
             arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n" );
             arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
 
@@ -157,16 +157,16 @@ public class SOCFragment extends Fragment {
             }
 
             arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ","\n      ")+"\n");
-            arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor"));
+            arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").toUpperCase());
             SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
             String vendor = prefs.getString("VENDOR", null);
             String renderer = prefs.getString("RENDERER", null);
 //            String version = prefs.getString("VERSION", null);
 //            String extensions = prefs.getString("EXTENSIONS", null);
-            arrSOCInfoList.add("\n    GPU Vendor: "+vendor+"\n");
-            arrSOCInfoList.add("\n    GPU Renderer: "+renderer+"\n");
+            arrSOCInfoList.add("\n    GPU Vendor: " + vendor + "\n");
+            arrSOCInfoList.add("\n    GPU Renderer: " + renderer + "\n");
+//            arrSOCInfoList.add("Open GL ES Version: "+configurationInfo.reqGlEsVersion);
             arrSOCInfoList.add("\n");
-//            arrSOCInfoList.add("Open GL ES Version: "+version);
 
             adapter.notifyDataSetChanged();
             //cpuInfoDynamic.setText(freqInfoText);

@@ -64,8 +64,7 @@ public class DeviceFragment extends Fragment {
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n", " ").toUpperCase();
 
-        arrDeviceInfoList.add("\n        SOC Manufacture :" + socVendor+"\n");
-        arrDeviceInfoList.add("\n        SOC Name: " + chipName+"\n");
+        arrDeviceInfoList.add("\n        SOC Details :" + socVendor+chipName+"\n");
 
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");
@@ -86,10 +85,10 @@ public class DeviceFragment extends Fragment {
 //        esMemoryNow=storageData[2];
 
         arrDeviceInfoList.add("\n        Model : "+model+"\n ");
-        arrDeviceInfoList.add("\n        Brand : "+brand+"\n ");
-        arrDeviceInfoList.add("\n        Board : "+board+"\n");
+        arrDeviceInfoList.add("\n        Hardware : "+brand.toUpperCase()+board+"\n ");
+//        arrDeviceInfoList.add("\n        Board : "+board+"\n");
         arrDeviceInfoList.add("\n        Screen Size : "+sSize+"\n");
-        arrDeviceInfoList.add("\n        Screen Resolution : "+sResolution+"\n");
+        arrDeviceInfoList.add("\n        Screen Resolution : "+sResolution+" Pixels\n");
         arrDeviceInfoList.add("\n        Screen Density : "+sDensity+" dpi\n");
         arrDeviceInfoList.add("\n        Total RAM : "+TotalRam+"\n");
         arrDeviceInfoList.add("\n        Available RAM : "+RamNow+"\n");
@@ -109,8 +108,8 @@ public class DeviceFragment extends Fragment {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
         int dens = dm.densityDpi;
-        double wi = (double)width / (double)dens;
-        double hi = (double)height / (double)dens;
+        double wi = (double)width / (double) dm.xdpi;
+        double hi = (double)height / (double) dm.ydpi;
         double x = Math.pow(wi, 2);
         double y = Math.pow(hi, 2);
         double screenInches = Math.sqrt(x+y);
