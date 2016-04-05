@@ -30,6 +30,16 @@ public class BatteryFragment extends Fragment {
     List<String> battInfo=null;
     StableArrayAdapter adapter;
     String battHealth[]={"UNKNOWN","UNKNOWN","GOOD","OVERHEAT","DEAD","VOLTAGE","UNSPECIFIED","FAILURE,BATTERY_HEALTH_COLD"};
+    //This is plugged status
+    String chargingStatus[]={"Not Charging","Charging,AC Power Supply","Charging, PC USB / Power Bank"};
+            /*Battery Status
+            1 = Unknown
+            2 = Charging
+            3 = Discharging
+            4 = Not Charging
+            5 = Full
+             */
+    String battStatus[]={"Unknown","Unknown","Charging","Discharging","Not Charging","Full"};
 
     public BatteryFragment()
     {
@@ -68,7 +78,7 @@ public class BatteryFragment extends Fragment {
     private BroadcastReceiver BatteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String chargingStatus[]={"Not Charging","Charging,AC Power Supply","Charging, PC USB / Power Bank"};
+
             arrBattInfoList.clear();
             int  health= intent.getIntExtra(BatteryManager.EXTRA_HEALTH,0);
             int  level= intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
@@ -85,12 +95,11 @@ public class BatteryFragment extends Fragment {
             arrBattInfoList.add("\n    Scale: "+scale+"\n");
             arrBattInfoList.add("\n    Level: "+level+"\n");
             arrBattInfoList.add("\n    Charging Status: "+chargingStatus[plugged]+"\n");
-            arrBattInfoList.add("\n    Status: "+status+"\n");
+            arrBattInfoList.add("\n    Battery Status: "+battStatus[status]+"\n");
             arrBattInfoList.add("\n    Technology: "+technology+"\n");
             arrBattInfoList.add("\n    Temperature: "+temperature+"\n");
             arrBattInfoList.add("\n    Voltage: "+voltage+" mV \n");
             arrBattInfoList.add("\n");
-
             adapter.notifyDataSetChanged();
 
         }

@@ -18,8 +18,6 @@ import java.util.List;
  * Created by pbathe on 8/3/16.
  */
 public class SoftwareFragment extends Fragment {
-
-
     View viewSoftwareFragment;
     TextView textViewSW;
     String swInfo[] = new String[10];
@@ -27,17 +25,14 @@ public class SoftwareFragment extends Fragment {
     ListView sList=null;
     List<String> sInfo=null;
     StableArrayAdapter adapter;
-
     public SoftwareFragment()
     {
 
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,8 +43,8 @@ public class SoftwareFragment extends Fragment {
         arrSWInfoList=new ArrayList<String>();
         sList=(ListView) viewSoftwareFragment.findViewById(R.id.swinfo_list);
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrSWInfoList);
-        sList.setAdapter(adapter);
 
+        sList.setAdapter(adapter);
         arrSWInfoList.clear();
         arrSWInfoList.add("\n    Android Version : " + swInfo[0] + "\n");
         arrSWInfoList.add("\n    API Level : " + swInfo[1]+"\n");

@@ -38,6 +38,7 @@ public class DeviceFragment extends Fragment {
     ListView diList=null;
     List<String> deviceInfo=null;
     StableArrayAdapter adapter;
+    String model,brand,board,sSize,sResolution,sDensity,sMemory,sMemoryNow,TotalRam,RamNow,esMemory,esMemoryNow;
 
     public DeviceFragment()
     {
@@ -53,19 +54,16 @@ public class DeviceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        String model,brand,board,sSize,sResolution,sDensity,sMemory,sMemoryNow,TotalRam,RamNow,esMemory,esMemoryNow;
-
         deviceFragmentView = inflater.inflate(R.layout.fragment_device, container, false);
         arrDeviceInfoList=new ArrayList<String>();
         diList=(ListView) deviceFragmentView.findViewById(R.id.deviceinfo_list);
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrDeviceInfoList);
         diList.setAdapter(adapter);
         arrDeviceInfoList.clear();
+
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n", " ").toUpperCase();
-
         arrDeviceInfoList.add("\n        SOC Details :" + socVendor+chipName+"\n");
-
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");
         board= InfoManager.getProp("ro.product.board").replace("\n", " ");
@@ -76,17 +74,15 @@ public class DeviceFragment extends Fragment {
         String[] memData= getRAMInfo();
         TotalRam =memData[0];
         RamNow= memData[1];
-
         String[] storageData= getStorageInfo();
-
         sMemory=storageData[1];
         sMemoryNow=storageData[0];
+
 //        esMemory=storageData[3];
 //        esMemoryNow=storageData[2];
 
         arrDeviceInfoList.add("\n        Model : "+model+"\n ");
         arrDeviceInfoList.add("\n        Hardware : "+brand.toUpperCase()+board+"\n ");
-//        arrDeviceInfoList.add("\n        Board : "+board+"\n");
         arrDeviceInfoList.add("\n        Screen Size : "+sSize+"\n");
         arrDeviceInfoList.add("\n        Screen Resolution : "+sResolution+" Pixels\n");
         arrDeviceInfoList.add("\n        Screen Density : "+sDensity+" dpi\n");
@@ -97,7 +93,6 @@ public class DeviceFragment extends Fragment {
 //        arrDeviceInfoList.add("\n        External Storage :"+esMemory+"\n");
 //        arrDeviceInfoList.add("\n        External Available Storage : "+esMemoryNow+"\n");
         arrDeviceInfoList.add("\n");
-
         adapter.notifyDataSetChanged();
         return deviceFragmentView;
     }

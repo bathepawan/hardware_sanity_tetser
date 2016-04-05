@@ -39,15 +39,12 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -55,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new DeviceFragment(), "Device");
         adapter.addFragment(new SOCFragment(), "SOC");
         adapter.addFragment(new SoftwareFragment(), "Software");
-        adapter.addFragment(new SensorsFragment(), "Sensors");
         adapter.addFragment(new BatteryFragment(),"Battery");
+        adapter.addFragment(new SensorsFragment(), "Sensors");
         adapter.addFragment(new ThermalFragment(),"Thermal");
         adapter.addFragment(new AboutFragment(),"About");
         viewPager.setAdapter(adapter);
@@ -119,5 +116,4 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
-
 }

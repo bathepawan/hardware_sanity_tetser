@@ -98,6 +98,8 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
         {
             sensorslist.clear();
             sensorslist.add("Error in getting sensors details, Please close app and retry");
+            adapter.notifyDataSetChanged();
+
         }
     }
 
@@ -170,7 +172,6 @@ public class SensorsFragment extends Fragment implements SensorEventListener{
 
     void  updateSensorsRawData( )
     {
-
 //        Log.d("RAWAN","Sensors available"+deviceSensors.size());
         for(int i=0; i<deviceSensors.size(); i++) {
             mSensor[i]=deviceSensors.get(i);

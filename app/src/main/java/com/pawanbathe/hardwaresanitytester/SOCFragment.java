@@ -27,19 +27,14 @@ import java.util.regex.Pattern;
  * Created by pbathe on 8/3/16.
  */
 public class SOCFragment extends Fragment {
-
     //Variable Declerations
-
     File[] cpuFiles;
     private TextView cpuInfoStatic,cpuInfoDynamic;
     private ArrayList<String> arrSOCInfoList=null;
     ListView siList=null;
     List<String> socInfo=null;
     StableArrayAdapter adapter;
-
-
     private View socFragmentView;
-
     int availableProcessors;
     int maxFreq,minFreq;
     int activeCores;
@@ -56,7 +51,10 @@ public class SOCFragment extends Fragment {
     String PATH_MAX1=null;
     String PATH_MAX2=null;
     String PATH_MIN=null;
-
+    String cpuGovernor="none";
+    String cpuFeatures="na";
+    String vendor="na";
+    String renderer="na";
     public SOCFragment()
     {
 
@@ -73,49 +71,51 @@ public class SOCFragment extends Fragment {
 
         //Views Mapping
         socFragmentView = inflater.inflate(R.layout.fragment_soc, container, false);
-        freqInfo=readCpuFreqNow();
         PATH_MIN=PREFIX_CPU_PATH+"0"+SUFIX_MIN;
         PATH_MAX1=PREFIX_CPU_PATH+"0"+SUFIX_MAX;
-        PATH_MAX2=PREFIX_CPU_PATH+cpuFiles.length+SUFIX_MAX;
-        minFreq=Integer.parseInt(cmdCat(PATH_MIN).trim());
-        maxFreq=Integer.parseInt(cmdCat(PATH_MAX1).trim());
-        minFreq=minFreq/1000;
-        maxFreq=maxFreq/1000;
+
+        try {
+            chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
+            socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
+            freqInfo = readCpuFreqNow();
+            PATH_MAX2 = PREFIX_CPU_PATH + cpuFiles.length + SUFIX_MAX;
+            minFreq = Integer.parseInt(cmdCat(PATH_MIN).trim());
+            maxFreq = Integer.parseInt(cmdCat(PATH_MAX1).trim());
+            minFreq = minFreq / 1000;
+            maxFreq = maxFreq / 1000;
+            Runtime runtime = Runtime.getRuntime();
+            availableProcessors = runtime.availableProcessors();
+            cpuGovernor=cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").toUpperCase();
+            cpuFeatures=getCPUFeatures().replace("\n", " ").trim().replace(" ", "\n      ")+"\n";
+            SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
+            vendor = prefs.getString("VENDOR", null);
+            renderer = prefs.getString("RENDERER", null);
+
+        }catch (Exception e)
+        {
+            minFreq=0;
+            maxFreq=0;
+            availableProcessors=0;
+            cpuGovernor="Error !";
+
+        }
 
         arrSOCInfoList=new ArrayList<String>();
         siList=(ListView) socFragmentView.findViewById(R.id.socinfo_list);
         adapter=new <String> StableArrayAdapter(getActivity(),R.layout.listview,arrSOCInfoList);
         siList.setAdapter(adapter);
         arrSOCInfoList.clear();
-
-        chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
-        socVendor=InfoManager.getProp("ro.hardware").replace("\n"," ").toUpperCase();
-
-
         arrSOCInfoList.add("\n    Model : " + socVendor+" "+ chipName+"\n");
-
         arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n");
         arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
-
-        Runtime runtime = Runtime.getRuntime();
-        availableProcessors = runtime.availableProcessors();
         for(int i=0; i<cpuFiles.length; i++){
             arrSOCInfoList.add(" \t     CPU "+i+": "+ freqInfo[i].replace("\n"," "+"\n"));
         }
-
-        arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ", "\n      ")+"\n");
-        arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").toUpperCase());
-        SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
-        String vendor = prefs.getString("VENDOR", null);
-        String renderer = prefs.getString("RENDERER", null);
-//        String version = prefs.getString("VERSION", null);
-//        String extensions = prefs.getString("EXTENSIONS", null);
-
+        arrSOCInfoList.add("\n    Supported " +cpuFeatures);
+        arrSOCInfoList.add("\n    CPU Governor : "+cpuGovernor);
         arrSOCInfoList.add("\n    GPU Vendor: "+vendor+"\n");
         arrSOCInfoList.add("\n    GPU Renderer: "+renderer+"\n");
-        //arrSOCInfoList.add("Open GL ES Version: "+configurationInfo.reqGlEsVersion);
         arrSOCInfoList.add("\n");
-
         adapter.notifyDataSetChanged();
         mHandler = new Handler();
         mHandler.post(periodicCPUChecker);
@@ -144,7 +144,6 @@ public class SOCFragment extends Fragment {
             arrSOCInfoList.add("\n    Model : " + socVendor + " " + chipName+"\n");
             arrSOCInfoList.add("\n    Total CPU Cores: " + availableProcessors + "\n" );
             arrSOCInfoList.add("\n    Clock Speed: " + minFreq + "-" + maxFreq + " MHz"+"\n");
-
             freqInfo=readCpuFreqNow();
             freqInfoText="";
             for(int i=0; i<cpuFiles.length; i++){
@@ -155,25 +154,16 @@ public class SOCFragment extends Fragment {
                     arrSOCInfoList.add("\n\t \t      CPU " + i + ": " + " off " + "\n");
                 }
             }
-
-            arrSOCInfoList.add("\n    Supported " + getCPUFeatures().replace("\n", " ").trim().replace(" ","\n      ")+"\n");
-            arrSOCInfoList.add("\n    CPU Governor : "+cmdCat("sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").toUpperCase());
-            SharedPreferences prefs = getActivity().getSharedPreferences("GPUinfo", Context.MODE_PRIVATE);
-            String vendor = prefs.getString("VENDOR", null);
-            String renderer = prefs.getString("RENDERER", null);
-//            String version = prefs.getString("VERSION", null);
-//            String extensions = prefs.getString("EXTENSIONS", null);
+            arrSOCInfoList.add("\n    Supported " + cpuFeatures);
+            arrSOCInfoList.add("\n    CPU Governor : "+cpuGovernor);
             arrSOCInfoList.add("\n    GPU Vendor: " + vendor + "\n");
             arrSOCInfoList.add("\n    GPU Renderer: " + renderer + "\n");
-//            arrSOCInfoList.add("Open GL ES Version: "+configurationInfo.reqGlEsVersion);
             arrSOCInfoList.add("\n");
-
             adapter.notifyDataSetChanged();
-            //cpuInfoDynamic.setText(freqInfoText);
             mHandler.postDelayed(periodicCPUChecker, 500);
         }
     };
-    // End Run Periodic CPU Info Checker
+// End Run Periodic CPU Info Checker
 // Start CPU Information
 
     private String[] readCpuFreqNow(){
