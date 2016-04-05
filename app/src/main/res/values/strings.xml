@@ -6,4 +6,5 @@
     <string name="free_note">Hardware Sanity Tester is free software</string>
     <string name="copyright">Copyright \u00a9 2016 - Pawan Bathe - All Rights Resereved </string>
     <string name="feedback">For feedback: dev.hst@gmail.com</string>
+    <string name="web">For Data Interpretation: <a href="http://hst.pawanbathe.com">http://hst.pawanbathe.com</a>  </string>
 </resources>

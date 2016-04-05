@@ -63,7 +63,6 @@ public class DeviceFragment extends Fragment {
 
         chipName=InfoManager.getProp("ro.chipname").replace("\n"," ").toUpperCase();
         socVendor=InfoManager.getProp("ro.hardware").replace("\n", " ").toUpperCase();
-        arrDeviceInfoList.add("\n        SOC Details :" + socVendor+chipName+"\n");
         model=InfoManager.getProp("ro.product.model").replace("\n", " ");
         brand=InfoManager.getProp("ro.product.brand").replace("\n", " ");
         board= InfoManager.getProp("ro.product.board").replace("\n", " ");
@@ -80,7 +79,7 @@ public class DeviceFragment extends Fragment {
 
 //        esMemory=storageData[3];
 //        esMemoryNow=storageData[2];
-
+        arrDeviceInfoList.add("\n        SOC Details :" + socVendor+chipName+"\n");
         arrDeviceInfoList.add("\n        Model : "+model+"\n ");
         arrDeviceInfoList.add("\n        Hardware : "+brand.toUpperCase()+board+"\n ");
         arrDeviceInfoList.add("\n        Screen Size : "+sSize+"\n");
