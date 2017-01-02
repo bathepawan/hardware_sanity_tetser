@@ -14,10 +14,10 @@ This App let you check basic hardware stuff and does sanity check of several har
 
 ##Screenshots:
 
-![Alt text](/hardware_sanity_tester/screenshots/five.jpeg?raw=true "Device Info")
-![Alt text](/hardware_sanity_tester/screenshots/six.jpeg?raw=true "SOC Info")
-![Alt text](/hardware_sanity_tester/screenshots/one.jpeg?raw=true "Software Info")
-![Alt text](/hardware_sanity_tester/screenshots/two.jpeg?raw=true "Battery Info")
-![Alt text](/hardware_sanity_tester/screenshots/three.jpeg?raw=true "Sensors Info")
-![Alt text](/hardware_sanity_tester/screenshots/four.jpeg?raw=true "Thermal Info")
+![Alt text](/screenshots/five.jpeg?raw=true "Device Info")
+![Alt text](/screenshots/six.jpeg?raw=true "SOC Info")
+![Alt text](/screenshots/one.jpeg?raw=true "Software Info")
+![Alt text](/screenshots/two.jpeg?raw=true "Battery Info")
+![Alt text](/screenshots/three.jpeg?raw=true "Sensors Info")
+![Alt text](/screenshots/four.jpeg?raw=true "Thermal Info")
 
