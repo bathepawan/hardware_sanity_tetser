@@ -1,4 +1,4 @@
-Hardware Sanity Tester - Android Application
+#Hardware Sanity Tester - Android Application
 
 Hardware Sanity Tester is android application developed to test basic hardware sanity,retrive hardware and software information in easiest way 
 This app let you know about
