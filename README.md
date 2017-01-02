@@ -1,5 +1,5 @@
 #Hardware Sanity Tester - Android Application
-
+### [Hardware Sanity Tester - Playstore link](https://play.google.com/store/apps/details?id=com.pawanbathe.hardwaresanitytester&hl=en)
 Hardware Sanity Tester is android application developed to test basic hardware sanity,retrive hardware and software information in easiest way 
 This app let you know about
 
@@ -11,3 +11,13 @@ This app let you know about
 * Software and Build Details
 
 This App let you check basic hardware stuff and does sanity check of several hardware components. Good and Handy for System Software Engineer and Tester to look into system
+
+##Screenshots:
+
+![Alt text](hardware_sanity_tetser/screenshots/five.jpeg?raw=true "Device Info")
+![Alt text](hardware_sanity_tetser/screenshots/six.jpeg?raw=true "SOC Info")
+![Alt text](hardware_sanity_tetser/screenshots/one.jpeg?raw=true "Software Info")
+![Alt text](hardware_sanity_tetser/screenshots/two.jpeg?raw=true "Battery Info")
+![Alt text](hardware_sanity_tetser/screenshots/three.jpeg?raw=true "Sensors Info")
+![Alt text](hardware_sanity_tetser/screenshots/four.jpeg?raw=true "Thermal Info")
+
